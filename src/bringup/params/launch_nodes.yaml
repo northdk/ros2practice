@@ -11,12 +11,12 @@ launch_nodes:
     #       #[optional] load_nodes_param: false (true/false)
     #       #[optional] enable_debug: false     (true/false)
 
-    - manager_cmd:
-        package: "manager"
-        executable: "manager"
-        # load_nodes_param: true
-        respawn: true
-        out_put_screen: true
+      - manager_cmd:
+          package: "manager"
+          executable: "manager"
+          # load_nodes_param: true
+          respawn: true
+          output_screen: true
 
   # Try to launch, if package or executable error, launcher will notice but skip that node
   other_nodes:
@@ -24,5 +24,5 @@ launch_nodes:
         package: "tank"
         executable: "tank"
         name: "tank"
-        out_put_screen: true
+        output_screen: true
 

@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <chrono>
 #include <thread>
+#include <unistd.h>
 #include "rclcpp/rclcpp.hpp"
 #include "protocol/msg/tank_active.hpp"
 #include "protocol/srv/probe.hpp"
@@ -20,6 +21,7 @@ public:
       auto msg = protocol::msg::TankActive();
       msg.activity = this->distance++;
       printf("tank publish once: %d\n", msg.activity);
+      fflush(stdout);
       m_pPublisher->publish(msg);
       std::this_thread::sleep_for(std::chrono::seconds(1));
     }
@@ -33,14 +35,15 @@ private:
   void ServiceFunc(const std::shared_ptr<tanksrv::Request> request, std::shared_ptr<tanksrv::Response> response) {
     (void) request;
     printf("tank service on call once\n");
+    fflush(stdout);
     response->distance = 1;
     response->landform = 1;
   }
 
 };
 
-void TestTankPublish() {
-  std::shared_ptr<Tank> tank = std::make_shared<Tank>();
+void TestTankPublish(const std::shared_ptr<Tank> tank) {
+  // std::shared_ptr<Tank> tank = std::make_shared<Tank>();
 
   while(true) {
     tank->RunOnce();
@@ -55,10 +58,19 @@ int main(int argc, char ** argv)
 
   printf("hello world tank package\n");
 
+  int counter = 0;
+  // while(true) {
+  //   printf("hello %d\n", counter++);
+  //   std::cout << "hello counter: " << counter++ << std::endl << std::flush;
+  //   fprintf(stdout, "hello tank: %d\n", counter++);
+  //   std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+  //   usleep(1000000);
+  // }
+  // while(true);
   rclcpp::init(argc, argv);
   std::shared_ptr<Tank> tank = std::make_shared<Tank>();
 
-  std::thread t = std::thread(TestTankPublish);
+  std::thread t = std::thread(TestTankPublish, tank);
   t.detach();
   rclcpp::spin(tank);
   rclcpp::shutdown();

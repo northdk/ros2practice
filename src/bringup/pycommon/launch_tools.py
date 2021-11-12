@@ -143,6 +143,8 @@ def Yaml_launcher(
         else:
             print('[launcher][Yaml_launcher_info] Empty remappings.yaml, disable all remappings')
         print('[launcher][Yaml_launcher_info] Success check: node[%s]' % node_def_name)
+        output_test='screen' if 'output_screen' in param and param['output_screen'] else 'log'
+        print("[launcher]: output test value: %s" % output_test)
         nodes_checked.append(Node(
             package=param['package'],
             executable=param['executable'],
@@ -151,7 +153,8 @@ def Yaml_launcher(
             name=param['name'] if 'name' in param and param['name'] else None,
             output='screen' if 'output_screen' in param and param['output_screen'] else 'log',
             prefix=[debug_param] if 'enable_debug' in param and param['enable_debug'] else None,
-            remappings=remappings_tuplelist))
+            remappings=remappings_tuplelist,
+            respawn=True))
     print('[launcher][Launch_Check_Info] Finish lanuch check, ', end='')
     if (checked_no_error['Base']):
         if (checked_no_error['Other']): print('all group nodes launch')

@@ -6,8 +6,19 @@
 #include "protocol/msg/tank_active.hpp"
 #include "protocol/srv/probe.hpp"
 
+void make_segment_fault() {
+  char a[5];
+  a[6] = 'a';
+}
+
 void sub_tank_running(const protocol::msg::TankActive::SharedPtr msg) {
-  printf("manager get msg: %d, tid: %ld, thread id: %ld\n", msg->activity, syscall(SYS_gettid), std::this_thread::get_id());
+  printf("manager get msg: %d, tid: %ld\n", msg->activity, syscall(SYS_gettid));
+  if(msg->activity == 10) {
+    printf("manager subscriber will make a segment fault\n!");
+    fflush(stdout);
+    make_segment_fault();
+  }
+  fflush(stdout);
 }
 
 int main(int argc, char ** argv)
@@ -34,11 +45,12 @@ int main(int argc, char ** argv)
     auto result = client_ptr->async_send_request(request_ptr);
     if(rclcpp::spin_until_future_complete(node_ptr, result) == rclcpp::FutureReturnCode::SUCCESS) {
       fprintf(stdout, "manager get service result: distance: %d, landform: %d. tid: %ld, thread id: %ld\n",
-       result.get()->distance, result.get()->landform, syscall(SYS_gettid), std::this_thread::get_id());
+      result.get()->distance, result.get()->landform, syscall(SYS_gettid), std::this_thread::get_id());
     } else {
       fprintf(stderr, "manager call service failed!\n");
     }
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    fflush(stdout);
+    std::this_thread::sleep_for(std::chrono::seconds(2));
   } 
   
   rclcpp::spin(node_ptr);

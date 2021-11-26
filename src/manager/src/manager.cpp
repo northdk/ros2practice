@@ -5,15 +5,16 @@
 #include "rclcpp/rclcpp.hpp"
 #include "protocol/msg/tank_active.hpp"
 #include "protocol/srv/probe.hpp"
+#include "utils/backtrace.h"
 
 void make_segment_fault() {
-  char a[5];
-  a[6] = 'a';
+  char* a = nullptr;
+  *a = 'a';
 }
 
 void sub_tank_running(const protocol::msg::TankActive::SharedPtr msg) {
   printf("manager get msg: %d, tid: %ld\n", msg->activity, syscall(SYS_gettid));
-  if(msg->activity == 10) {
+  if((msg->activity % 10) == 0) {
     printf("manager subscriber will make a segment fault\n!");
     fflush(stdout);
     make_segment_fault();
@@ -25,6 +26,8 @@ int main(int argc, char ** argv)
 {
   // (void) argc;
   // (void) argv;
+  signal(SIGSEGV, signal_handler);
+  signal(SIGABRT, signal_handler);
   printf("hello world manager package\n");
   rclcpp::init(argc, argv);
   auto node_ptr = rclcpp::Node::make_shared("manager");
@@ -36,6 +39,8 @@ int main(int argc, char ** argv)
   while(! client_ptr->wait_for_service(std::chrono::seconds(1))) {
     if(! rclcpp::ok()) {
       fprintf(stderr, "manager got error with rcl not ok!\n");
+
+      
       return 0;
     }
     fprintf(stdout, "manager waiting for service ready...\n");

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(manager)
+project(utils)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -7,32 +7,13 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(protocol REQUIRED)
-find_package(utils REQUIRED)
+# uncomment the following section in order to fill in
+# further dependencies manually.
+# find_package(<dependency> REQUIRED)
 
-if(utils_FOUND)
-  message(STATUS "utils was found")
-endif()
-add_executable(manager src/manager.cpp)
-
-ament_target_dependencies(manager
-  rclcpp
-  protocol
-  utils)
-
-# target_include_directories(manager PUBLIC
-#   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-#   $<INSTALL_INTERFACE:include>)
-target_compile_features(manager PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
-
-install(TARGETS manager
-  DESTINATION lib/${PROJECT_NAME})
-
-# install(DIRECTORY
-#   launch
-#   DESTINATION share/${PROJECT_NAME}/
-# )
+install(DIRECTORY include/
+  DESTINATION include/
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -45,5 +26,5 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-# ament_export_dependencies(utils)
+ament_export_include_directories(include)
 ament_package()

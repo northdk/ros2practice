@@ -153,8 +153,8 @@ def Yaml_launcher(
             name=param['name'] if 'name' in param and param['name'] else None,
             output='screen' if 'output_screen' in param and param['output_screen'] else 'log',
             prefix=[debug_param] if 'enable_debug' in param and param['enable_debug'] else None,
-            remappings=remappings_tuplelist,
-            respawn=True))
+            remappings=remappings_tuplelist))
+            # respawn=True))
     print('[launcher][Launch_Check_Info] Finish lanuch check, ', end='')
     if (checked_no_error['Base']):
         if (checked_no_error['Other']): print('all group nodes launch')

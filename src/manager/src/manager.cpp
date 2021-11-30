@@ -12,6 +12,11 @@ void make_segment_fault() {
   *a = 'a';
 }
 
+/**
+ * @brief 
+ * 
+ * @param msg 
+ */
 void sub_tank_running(const protocol::msg::TankActive::SharedPtr msg) {
   printf("manager get msg: %d, tid: %ld\n", msg->activity, syscall(SYS_gettid));
   if((msg->activity % 10) == 0) {
@@ -39,8 +44,6 @@ int main(int argc, char ** argv)
   while(! client_ptr->wait_for_service(std::chrono::seconds(1))) {
     if(! rclcpp::ok()) {
       fprintf(stderr, "manager got error with rcl not ok!\n");
-
-      
       return 0;
     }
     fprintf(stdout, "manager waiting for service ready...\n");

@@ -12,7 +12,7 @@ find_package(polygon_base REQUIRED)
 find_package(pluginlib REQUIRED)
 
 add_library(polygon_plugins src/polygon_plugins.cpp)
-target_compile_features(polygon_plugins PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+target_compile_features(polygon_plugins PUBLIC c_std_99 cxx_std_11)  # Require C99 and C++17
 target_include_directories(polygon_plugins PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)

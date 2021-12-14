@@ -7,6 +7,7 @@
   <maintainer email="dukun1@xiaomi.com">dukun</maintainer>
   <license>TODO: License declaration</license>
   <depend>rclcpp</depend>
+  <depend>rclcpp_action</depend>
   <depend>protocol</depend>
   <depend>utils</depend>
   <buildtool_depend>ament_cmake</buildtool_depend>

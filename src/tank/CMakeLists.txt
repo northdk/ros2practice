@@ -2,24 +2,35 @@ cmake_minimum_required(VERSION 3.8)
 project(tank)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wall -Wextra -Wpedantic)
+  add_compile_options(-Wall -Wextra -Wpedantic -g)
 endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(rclcpp_action REQUIRED)
 find_package(protocol REQUIRED)
+find_package(pluginlib REQUIRED)
+find_package(utils REQUIRED)
 
 add_executable(tank src/tank.cpp)
 
 ament_target_dependencies(tank
   rclcpp
-  protocol)
+  rclcpp_action
+  "pluginlib"
+  protocol
+  utils)
 
 target_include_directories(tank PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 target_compile_features(tank PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+
+install(
+  DIRECTORY include/
+  DESTINATION include
+)
 
 install(TARGETS tank
   DESTINATION lib/${PROJECT_NAME})
@@ -35,4 +46,7 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
+ament_export_include_directories(
+  include
+)
 ament_package()

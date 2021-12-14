@@ -8,16 +8,29 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(rclcpp_action)
 find_package(protocol REQUIRED)
 find_package(utils REQUIRED)
+
+set(excutable_name manager)
+option(ACTION "Build with Action Code" ON)
+
 
 if(utils_FOUND)
   message(STATUS "utils was found")
 endif()
+
 add_executable(manager src/manager.cpp)
+
+# if(ACTION)
+#   target_compile_definitions(${executable_name} PRIVATE "action")
+# endif()
+
+# add_executable(dockertest src/dockertest.cpp)
 
 ament_target_dependencies(manager
   rclcpp
+  rclcpp_action
   protocol
   utils)
 
@@ -29,6 +42,9 @@ target_compile_features(manager PUBLIC c_std_99 cxx_std_17)  # Require C99 and C
 install(TARGETS manager
   DESTINATION lib/${PROJECT_NAME})
 
+
+# install(TARGETS dockertest
+#   DESTINATION lib/${PROJECT_NAME})
 # install(DIRECTORY
 #   launch
 #   DESTINATION share/${PROJECT_NAME}/

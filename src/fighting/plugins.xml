@@ -1,0 +1,5 @@
+<library path="fighting">
+  <class type="tank_a" base_class_type="Tank">
+    <description>This is a 99a tank.</description>
+  </class>
+</library>

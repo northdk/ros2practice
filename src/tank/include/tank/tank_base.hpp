@@ -15,12 +15,11 @@
 class Tank
 {
 public:
-    virtual void init() = 0;
+    virtual void init(const std::string& name) = 0;
     virtual void action() = 0;
-protected:
-    Tank(const std::string& name) : _name(name) {};
+    // virtual ~Tank() {}
 
-private:
-    std::string _name;
+protected:
+    Tank(){}
 };
 #endif

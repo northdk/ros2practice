@@ -1,0 +1,9 @@
+string cmd
+
+---
+
+bool last
+
+---
+
+string status

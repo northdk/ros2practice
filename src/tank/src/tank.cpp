@@ -1,3 +1,13 @@
+/**
+ * @file tank.cpp
+ * @author North.D.K (north24@qq.com) (dk_snow on github.com)
+ * @brief All tanks running in this module
+ * @version 1.0
+ * @date 2022-01-08
+ * 
+ * @copyright See the LICENSE file.
+ * 
+ */
 #include <cstdio>
 #include <chrono>
 #include <thread>
@@ -21,7 +31,8 @@ using tanksrv = protocol::srv::Probe;
 public:
   Tankt() : Node("try") {
     m_pPublisher = this->create_publisher<protocol::msg::TankActive>("tank_running", 10);
-    m_pService = this->create_service<protocol::srv::Probe>("tank_calling", std::bind(&Tankt::ServiceFunc, this, std::placeholders::_1, std::placeholders::_2));
+    m_pService = this->create_service<protocol::srv::Probe>("tank_calling",
+      std::bind(&Tankt::ServiceFunc, this, std::placeholders::_1, std::placeholders::_2));
   }
 
   void RunOnce() {

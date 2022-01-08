@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(fighting)
+project(state)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -7,38 +7,45 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(ament_cmake_ros REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(tank REQUIRED)
 find_package(protocol REQUIRED)
-find_package(pluginlib REQUIRED)
-find_package(utils REQUIRED)
 
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
 
-add_library(fighting src/tank_a.cpp)
 
-ament_target_dependencies(fighting
+ament_export_include_directories(
+  include
+)
+
+add_executable(state_a src/state_a.cpp)
+add_executable(state_b src/state_b.cpp)
+
+ament_target_dependencies(state_a
   rclcpp
-  "pluginlib"
-  tank
-  utils
   protocol)
 
-pluginlib_export_plugin_description_file(tank plugins.xml)
+ament_target_dependencies(state_b
+  rclcpp
+  protocol)
 
-# install(
-#   DIRECTORY include/
-#   DESTINATION include
-# )
+target_include_directories(state_a PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+
+target_include_directories(state_b PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+target_compile_features(state_a PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+
+
+install(TARGETS state_a
+  DESTINATION lib/${PROJECT_NAME})
+
+install(TARGETS state_b
+  DESTINATION lib/${PROJECT_NAME})
+
 install(
-  TARGETS fighting
-  EXPORT export_${PROJECT_NAME}
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin
+  DIRECTORY include/
+  DESTINATION include
 )
 
 if(BUILD_TESTING)
@@ -54,11 +61,5 @@ endif()
 
 ament_export_include_directories(
   include
-)
-ament_export_libraries(
-  fighting
-)
-ament_export_targets(
-  export_${PROJECT_NAME}
 )
 ament_package()

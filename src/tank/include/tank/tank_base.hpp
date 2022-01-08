@@ -5,7 +5,7 @@
  * @version 0.1
  * @date 2021-11-30
  * 
- * @copyright Copyright (c) 2021
+ * @copyright See the LICENSE file.
  * 
  */
 #ifndef TANK_BASE_HPP

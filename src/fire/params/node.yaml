@@ -1,0 +1,14 @@
+launch_nodes:
+  - manager:
+      package: "manager"
+      executable: "manager"
+      respawn: true
+      output_screen: true
+
+  - tank:
+      package: "tank"
+      executable: "tank"
+      respawn: true
+      output_screen: true
+
+ 

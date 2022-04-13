@@ -144,6 +144,7 @@ int main(int argc, char ** argv)
     // rclcpp::spin(tank);
 
   // std::this_thread::sleep_for(std::chrono::seconds(10));
+  tank->RunOnce();
   rclcpp::spin(tank);
   rclcpp::shutdown();
   return 0;

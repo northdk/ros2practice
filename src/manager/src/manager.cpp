@@ -21,11 +21,11 @@ void make_segment_fault() {
  */
 void sub_tank_running(const protocol::msg::TankActive::SharedPtr msg) {
   printf("manager get msg: %d, tid: %ld\n", msg->activity, syscall(SYS_gettid));
-  // if((msg->activity % 10) == 0) {
-  //   printf("manager subscriber will make a segment fault\n!");
-  //   fflush(stdout);
-  //   make_segment_fault();
-  // }
+    if(msg->activity %5 == 0) {
+      printf("manager subscriber will make a segment fault\n!");
+      fflush(stdout);
+      make_segment_fault();
+    }
   fflush(stdout);
 }
 
@@ -120,13 +120,13 @@ int main(int argc, char ** argv)
 {
   // (void) argc;
   // (void) argv;
-  signal(SIGSEGV, signal_handler);
-  signal(SIGABRT, signal_handler);
-  printf("hello world manager package\n");
+  // signal(SIGSEGV, signal_handler);
+  // signal(SIGABRT, signal_handler);
+  printf("hello, manager package\n");
   rclcpp::init(argc, argv);
   
 
-#ifdef old
+
   auto node_ptr = rclcpp::Node::make_shared("manager");
   auto sub = node_ptr->create_subscription<protocol::msg::TankActive>("tank_running", rclcpp::SystemDefaultsQoS(), sub_tank_running);
 
@@ -154,11 +154,10 @@ int main(int argc, char ** argv)
   }
   rclcpp::spin(node_ptr);
   rclcpp::shutdown();
-#endif
 
-  auto manager = std::make_shared<Manager>();
-  rclcpp::spin(manager);
-  rclcpp::shutdown();
+  // auto manager = std::make_shared<Manager>();
+  // rclcpp::spin(manager);
+  // rclcpp::shutdown();
 
   return 0;
 }

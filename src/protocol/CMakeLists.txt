@@ -15,6 +15,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/State.msg"
   "srv/Probe.srv"
   "action/Contact.action"
+  "msg/Test.msg"
  )
 
 # add_executable(protocol src/protocol.cpp)

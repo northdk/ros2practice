@@ -34,19 +34,39 @@ public:
         cout << "state a get name: " << name << endl;
     }
 
+    void timer_callback() {
+        static int8_t state;
+        this->SetState(state);
+        state++;
+    }
+
     void Run() {
         int8_t state = 0;
-        thread t([this, &state](){
-            while (true)
-            {
+        cout << "here\n";
+        t = this->create_wall_timer(chrono::seconds(1),
+            [this, &state](){
+                cout << "stats: " << state << endl;
                 this->SetState(state);
-                this_thread::sleep_for(chrono::seconds(1));
                 state++;
-            }
-        });
+            });
+
+        // t = this->create_wall_timer(chrono::seconds(1),
+        //     std::bind(&StateA::timer_callback, this));
+
+        cout << "here\n";
+        // thread t([this, &state](){
+        //     while (true)
+        //     {
+        //         this->SetState(state);
+        //         this_thread::sleep_for(chrono::seconds(1));
+        //         state++;
+        //     }
+        // });
         
-        t.detach();
+        // t.detach();
     }
+private:
+    rclcpp::TimerBase::SharedPtr t;
 };
 
 
